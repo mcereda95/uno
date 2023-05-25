@@ -15,7 +15,7 @@ namespace Uno.UI.Runtime.Skia
 	/// </summary>
 	internal class GLValidationSurface : GLArea
 	{
-		private TaskCompletionSource<RenderSurfaceType> _result = new();
+		private readonly TaskCompletionSource<RenderSurfaceType> _result = new();
 
 		public GLValidationSurface()
 		{

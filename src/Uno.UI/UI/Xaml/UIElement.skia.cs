@@ -93,7 +93,9 @@ namespace Windows.UI.Xaml
 				if (_visual == null)
 				{
 					_visual = Window.Current.Compositor.CreateContainerVisual();
-					_visual.Comment = $"Owner:{GetType()}/{Name}";
+#if DEBUG
+					_visual.Comment = $"Owner: {this.GetDebugDepth():D2}-{this.GetDebugName()}";
+#endif
 				}
 
 				return _visual;
