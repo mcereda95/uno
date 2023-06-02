@@ -9,6 +9,7 @@ using Windows.Foundation;
 using Java.Nio;
 using Android.Views;
 using Uno.UI.Xaml.Media;
+using Uno.Extensions;
 
 namespace Windows.UI.Xaml.Media.Imaging
 {
