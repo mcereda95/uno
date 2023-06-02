@@ -10,19 +10,13 @@ namespace Windows.UI.Composition
 		private static object _gate = new object();
 
 		public ContainerVisual CreateContainerVisual()
-			=> new ContainerVisual(this)
-			{
-			};
+			=> new ContainerVisual(this);
 
 		public SpriteVisual CreateSpriteVisual()
-			=> new SpriteVisual(this)
-			{
-			};
+			=> new SpriteVisual(this);
 
 		public CompositionColorBrush CreateColorBrush()
-			=> new CompositionColorBrush(this)
-			{
-			};
+			=> new CompositionColorBrush(this);
 
 		public CompositionColorBrush CreateColorBrush(Color color)
 			=> new CompositionColorBrush(this)
@@ -138,6 +132,9 @@ namespace Windows.UI.Composition
 				Offset = offset,
 				Color = color
 			};
+
+		public CompositionViewBox CreateViewBox()
+			=> new CompositionViewBox(this);
 
 		internal void InvalidateRender() => InvalidateRenderPartial();
 
