@@ -23,7 +23,7 @@ namespace Windows.UI.Xaml
 {
 	public partial class UIElement : DependencyObject
 	{
-		private ContainerVisual _visual;
+		private ShapeVisual _visual;
 		internal double _canvasTop;
 		internal double _canvasLeft;
 		private Rect _currentFinalRect;
@@ -85,14 +85,14 @@ namespace Windows.UI.Xaml
 			Visual.Opacity = Visibility == Visibility.Visible ? (float)Opacity : 0;
 		}
 
-		internal ContainerVisual Visual
+		internal ShapeVisual Visual
 		{
 			get
 			{
 
-				if (_visual == null)
+				if (_visual is null)
 				{
-					_visual = Window.Current.Compositor.CreateContainerVisual();
+					_visual = Window.Current.Compositor.CreateShapeVisual();
 #if DEBUG
 					_visual.Comment = $"Owner: {this.GetDebugDepth():D2}-{this.GetDebugName()}";
 #endif
@@ -335,7 +335,20 @@ namespace Windows.UI.Xaml
 			visual.Size = new Vector2((float)roundedRect.Width, (float)roundedRect.Height);
 			visual.CenterPoint = new Vector3((float)RenderTransformOrigin.X, (float)RenderTransformOrigin.Y, 0);
 
-			ApplyNativeClip(clip ?? Rect.Empty);
+			// The clipping applied by our parent due to layout constraints are pushed to the visual through the ViewBox property
+			// This allows special handling of this clipping by the compositor (cf. ShapeVisual.Render).
+			if (clip is null)
+			{
+				visual.ViewBox = null;
+			}
+			else
+			{
+				var viewBox = visual.Compositor.CreateViewBox();
+				viewBox.Offset = clip.Value.Location.ToVector2();
+				viewBox.Size = clip.Value.Size.ToVector2();
+				
+				visual.ViewBox = viewBox;
+			}
 		}
 
 		partial void ApplyNativeClip(Rect rect)
