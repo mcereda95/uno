@@ -16,7 +16,7 @@ public partial class Compositor
 	private Filter _currentFilter = Filter.Default;
 
 	private bool _isDirty;
-	
+
 	internal ContainerVisual? RootVisual { get; set; }
 
 	internal Filter CurrentFilter => _currentFilter;
