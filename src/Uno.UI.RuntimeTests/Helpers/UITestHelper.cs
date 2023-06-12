@@ -51,7 +51,7 @@ public static class UITestHelper
 		await TestServices.WindowHelper.WaitForIdle();
 
 		RawBitmap bitmap;
-		switch(scaling)
+		switch (scaling)
 		{
 			case ScreenShotScalingMode.UsePhysicalPixelsWithImplicitScaling:
 				await renderer.RenderAsync(element);
@@ -120,10 +120,10 @@ public static class UITestHelper
 							Height = bitmap.Height,
 							Source = await bitmap.GetImageSource(),
 							Stretch = Stretch.None,
-							ManipulationMode = ManipulationModes.Scale 
+							ManipulationMode = ManipulationModes.Scale
 								| ManipulationModes.ScaleInertia
-								| ManipulationModes.TranslateX 
-								| ManipulationModes.TranslateY 
+								| ManipulationModes.TranslateX
+								| ManipulationModes.TranslateY
 								| ManipulationModes.TranslateInertia,
 							RenderTransform = imgTr = new CompositeTransform()
 						}
