@@ -191,12 +191,8 @@ namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml_Media
 
 		private async Task<RawBitmap> Arrange(FrameworkElement SUT)
 		{
-			WindowHelper.WindowContent = SUT;
-			await WindowHelper.WaitForLoaded(SUT);
-			var renderer = new RenderTargetBitmap();
-			await WindowHelper.WaitForIdle();
-			await renderer.RenderAsync(SUT);
-			var result = await RawBitmap.From(renderer, SUT);
+			await UITestHelper.Load(SUT);
+			var result = await UITestHelper.ScreenShot(SUT);
 			await WindowHelper.WaitForIdle();
 			return result;
 		}
