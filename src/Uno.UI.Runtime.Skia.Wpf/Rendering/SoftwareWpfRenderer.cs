@@ -82,12 +82,9 @@ namespace Uno.UI.Runtime.Skia.Wpf.Rendering
 				{
 					WinUI.Window.Current.Compositor.Render(surface);
 				}
-				else
+				else if (_host.RootElement?.Visual is { } visual)
 				{
-					if (_host.RootElement?.Visual != null)
-					{
-						WinUI.Window.Current.Compositor.RenderVisual(surface, _host.RootElement?.Visual!);
-					}
+					visual.Render(surface);
 				}
 			}
 
