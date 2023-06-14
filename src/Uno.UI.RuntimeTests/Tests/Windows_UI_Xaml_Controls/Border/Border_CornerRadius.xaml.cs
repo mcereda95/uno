@@ -21,5 +21,46 @@ public sealed partial class Border_CornerRadius : Page
 	public Border_CornerRadius()
 	{
 		this.InitializeComponent();
+		var asd = Resources["TestConverter"];
+
+		// todo: you can remove all the button in the page too, no longer needed
+	}
+
+	private void DebugStuff(object sender, RoutedEventArgs e)
+	{
+		if (MyTextBox is TextBox tb)
+		{
+			var templateRoot = VisualTreeHelper.GetChild(tb, 0) as Grid; // ok
+																		   //var vsgs = VisualStateManager.GetVisualStateGroups(templateRoot); // ok
+
+			VisualStateManager.GetVisualStateGroups(templateRoot).ToList();
+			//var commonVsg = vsgs.FirstOrDefault(x => x.Name == "CommonStates"); // break the binding
+			//var commonVs = commonVsg?.CurrentState;
+		}
+	}
+	private void SetText(object sender, RoutedEventArgs e)
+	{
+		if (sender is Button btn)
+		{
+			MyTextBox.Text = btn.Tag as string ?? "";
+		}
+	}
+	private void EnterVS(object sender, RoutedEventArgs e)
+	{
+		if (sender is Button btn && btn.Tag is string state)
+		{
+			//FE::GoToElementStateCore(string, bool);
+			//var method = typeof(FrameworkElement).GetMethod("GoToElementStateCore", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+			//method?.Invoke(MyTextBox, new object[] { state, false });
+			try
+			{
+				//(MyTextBox as TextBoxV2).GotoState(state);
+				VisualStateManager.GoToState(MyTextBox, state, false);
+			}
+			catch (Exception e2)
+			{
+				e2.ToString();
+			}
+		}
 	}
 }

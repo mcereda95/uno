@@ -12,6 +12,8 @@ using Windows.UI;
 using FluentAssertions;
 using MUXControlsTestApp.Utilities;
 using System.Runtime.InteropServices;
+using Windows.UI.Xaml.Markup;
+using System.Linq;
 #if NETFX_CORE
 using Uno.UI.Extensions;
 #elif __IOS__
@@ -676,6 +678,23 @@ namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml_Controls
 			textBox.SelectAll();
 
 			Assert.AreEqual(updatedText.Length, textBox.SelectionLength);
+		}
+
+		[TestMethod]
+		public async Task When_ASKDJSALKJDLKSAJDL_QweQwe() // fixme: name
+		{
+			// todo: restore the original code (both xaml and cs) for Border_CornerRadius
+			//		and create a new page/usercontrol for this sample
+			var sut = new Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml_Controls.Border_CornerRadius();
+
+			WindowHelper.WindowContent = sut;
+			await WindowHelper.WaitForLoaded(sut);
+
+			// todo: add code to change the visual-states and verify that the converter get re-evaluated each time
+			//	maybe the converter can add the # of call (instanced) to the result of Convert(), so we can verify that here...
+			//	or add a callback to the converter
+
+			// todo: rename UberTestConveter (typo)
 		}
 	}
 }

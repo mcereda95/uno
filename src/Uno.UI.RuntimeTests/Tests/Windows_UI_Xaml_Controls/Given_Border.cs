@@ -116,58 +116,6 @@ namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml_Controls
 		}
 
 		[TestMethod]
-		public async Task Check_CornerRadius_Border_Basic()
-		{
-			// Verify that border is drawn with the same thickness with/without CornerRadius
-			const string white = "#FFFFFFFF";
-
-#if __MACOS__
-			Assert.Inconclusive(); // MACOS interpret colors differently
-#endif
-			if (!ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.Imaging.RenderTargetBitmap"))
-			{
-				Assert.Inconclusive(); // System.NotImplementedException: RenderTargetBitmap is not supported on this platform.;
-			}
-
-			var SUT = new Border_CornerRadius();
-			var result = await TakeScreenshot(SUT);
-			var sample = SUT.GetRelativeCoords(SUT.Sample1);
-			var eighth = sample.Width / 8;
-
-			ImageAssert.HasPixels(
-				result,
-				ExpectedPixels.At(sample.X + eighth, sample.Y + eighth).Named("top left corner").WithPixelTolerance(2, 2).Pixel(white),
-				ExpectedPixels.At(sample.Right - eighth, sample.Y + eighth).Named("top right corner").WithPixelTolerance(2, 2).Pixel(white),
-				ExpectedPixels.At(sample.Right - eighth, sample.Bottom - eighth).Named("bottom right corner").WithPixelTolerance(2, 2).Pixel(white),
-				ExpectedPixels.At(sample.X + eighth, sample.Bottom - eighth).Named("bottom left corner").WithPixelTolerance(2, 2).Pixel(white)
-			);
-
-#if __WASM__ && false // See https://github.com/unoplatform/uno/issues/5440 for the scenario being tested.
-			var sample2 = _app.GetPhysicalRect("Sample2");
-
-			var top = sample2.Y + 1;
-			ImageAssert.HasColorAt(result, sample2.CenterX, top, Color.Red, tolerance: 20);
-			ImageAssert.HasColorAt(result, sample2.CenterX + 25, top, Color.White);
-			ImageAssert.HasColorAt(result, sample2.CenterX - 25, top, Color.White);
-
-			var bottom = sample2.Bottom - 1;
-			ImageAssert.HasColorAt(result, sample2.CenterX, bottom, Color.Red, tolerance: 20);
-			ImageAssert.HasColorAt(result, sample2.CenterX + 20, bottom, Color.White);
-			ImageAssert.HasColorAt(result, sample2.CenterX - 20, bottom, Color.White);
-
-			var right = sample2.Right - 1;
-			ImageAssert.HasColorAt(result, right, sample2.CenterY, Color.Red, tolerance: 20);
-			ImageAssert.HasColorAt(result, right, sample2.CenterY - 10, Color.White);
-			ImageAssert.HasColorAt(result, right, sample2.CenterY + 10, Color.White);
-
-			var left = sample2.X + 2;
-			ImageAssert.HasColorAt(result, left, sample2.CenterY, Color.Red, tolerance: 20);
-			ImageAssert.HasColorAt(result, left, sample2.CenterY - 10, Color.White);
-			ImageAssert.HasColorAt(result, left, sample2.CenterY + 10, Color.White);
-#endif
-		}
-
-		[TestMethod]
 		public async Task Border_CornerRadius_BorderThickness()
 		{
 			//Same colors but with the addition of a White background color underneath

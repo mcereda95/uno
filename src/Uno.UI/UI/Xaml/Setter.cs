@@ -24,7 +24,6 @@ namespace Windows.UI.Xaml
 	{
 		public Setter()
 		{
-
 		}
 
 		private BindingPath? _bindingPath;
@@ -33,6 +32,12 @@ namespace Windows.UI.Xaml
 		private int _targetNameResolutionFailureCount;
 		private DependencyProperty? _property;
 		private TargetPropertyPath? _target;
+
+		public static DependencyProperty ValueBackingProperty { get; } = DependencyProperty.Register(
+			nameof(Value),
+			typeof(object),
+			typeof(Setter),
+			new FrameworkPropertyMetadata(default(object)));
 
 		public object? Value
 		{

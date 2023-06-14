@@ -9,6 +9,7 @@ using System.Text;
 using Uno.Extensions;
 using Uno.Foundation.Logging;
 using Uno.UI.DataBinding;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Markup;
 using Uno.UI;
@@ -335,7 +336,23 @@ namespace Windows.UI.Xaml
 
 					while (settersEnumerator.MoveNext())
 					{
-						settersEnumerator.Current.ApplyValue(DependencyPropertyValuePrecedences.Animations, element);
+						var current = settersEnumerator.Current;
+
+						// todo: add why we are doing this
+						if (current is IDependencyObjectStoreProvider provider)
+						{
+							var expression = provider.Store.GetBindingExpression(Setter.ValueBackingProperty);
+							if (expression is { } && expression.ParentBinding is { RelativeSource.Mode: RelativeSourceMode.TemplatedParent, Converter: { } })
+							{
+								// force binding value to re-evaluate
+								expression.SuspendBinding();
+								expression.ResumeBinding();
+							}
+						}
+
+						current.ApplyValue(DependencyPropertyValuePrecedences.Animations, element);
+
+
 					}
 				}
 #if !HAS_EXPENSIVE_TRYFINALLY
