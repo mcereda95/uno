@@ -543,7 +543,7 @@ namespace Windows.UI.Xaml.Controls
 
 				if (Template != null)
 				{
-					TemplatedRoot = Template.LoadContentCached();
+					TemplatedRoot = Template.LoadContentCached(this);
 				}
 				else
 				{

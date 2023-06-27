@@ -263,6 +263,7 @@ namespace Windows.UI.Xaml
 
 		private void TryReuseTemplateRoot(object instance, object? key, object? newParent, bool shouldCleanUpTemplateRoot)
 		{
+			// fixme@xy: add handling for TemplatedParentScope here ?if needed?
 			if (!IsPoolingEnabled)
 			{
 				return;
