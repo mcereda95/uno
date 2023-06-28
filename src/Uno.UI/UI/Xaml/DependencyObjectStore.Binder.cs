@@ -38,7 +38,6 @@ namespace Windows.UI.Xaml
 		private readonly HashtableEx _childrenBindableMap = new HashtableEx(DependencyPropertyComparer.Default);
 		private readonly List<object?> _childrenBindable = new List<object?>();
 
-		private bool _isApplyingTemplateBindings;
 		private bool _isApplyingDataContextBindings;
 		private bool _bindingsSuspended;
 		private readonly DependencyProperty _dataContextProperty;
@@ -54,60 +53,11 @@ namespace Windows.UI.Xaml
 		/// </param>
 		public void SetTemplatedParent(FrameworkElement? templatedParent)
 		{
-#if !HAS_EXPENSIVE_TRYFINALLY
-			// The try/finally incurs a very large performance hit in mono-wasm, and SetValue is in a very hot execution path.
-			// See https://github.com/dotnet/runtime/issues/50783 for more details.
-			try
-#endif
-			{
-				if (_isApplyingTemplateBindings || _bindingsSuspended)
-				{
-					// If we reach this point, this means that a propagation loop has been detected, and
-					// we can skip the current binder.
-					// This can happen if a DependencyObject-typed DependencyProperty contains a reference
-					// to one of its ancestors.
-					return;
-				}
-
-				_isApplyingTemplateBindings = true;
-
-				if (this.Log().IsEnabled(Uno.Foundation.Logging.LogLevel.Debug))
-				{
-					this.Log().DebugFormat(
-						"{0}.ApplyTemplateBindings({1}/{2}) (h:{3:X8})",
-						_originalObjectType.ToString(),
-						templatedParent?.GetType().ToString() ?? "[null]",
-						templatedParent?.GetHashCode().ToString("X8", CultureInfo.InvariantCulture) ?? "[null]",
-						ActualInstance?.GetHashCode()
-					);
-				}
-
-				_properties.ApplyTemplatedParent(templatedParent);
-
-				ApplyChildrenBindable(templatedParent, isTemplatedParent: true);
-			}
-#if !HAS_EXPENSIVE_TRYFINALLY
-			finally
-#endif
-			{
-				_isApplyingTemplateBindings = false;
-			}
+			// called by code gen: SetTemplatedParent
 		}
 
-		private void ApplyChildrenBindable(object? inheritedValue, bool isTemplatedParent)
+		private void ApplyChildrenBindable(object? inheritedValue)
 		{
-			static void SetInherited(IDependencyObjectStoreProvider provider, object? inheritedValue, bool isTemplatedParent)
-			{
-				if (isTemplatedParent)
-				{
-					provider.Store.SetInheritedTemplatedParent(inheritedValue);
-				}
-				else
-				{
-					provider.Store.SetInheritedDataContext(inheritedValue);
-				}
-			}
-
 			for (int i = 0; i < _childrenBindable.Count; i++)
 			{
 				var child = _childrenBindable[i];
@@ -131,7 +81,7 @@ namespace Windows.UI.Xaml
 
 				if (childAsStoreProvider != null)
 				{
-					SetInherited(childAsStoreProvider, inheritedValue, isTemplatedParent);
+					childAsStoreProvider.Store.SetInheritedDataContext(inheritedValue);
 				}
 				else
 				{
@@ -148,7 +98,7 @@ namespace Windows.UI.Xaml
 							{
 								if (list[childIndex] is IDependencyObjectStoreProvider provider2)
 								{
-									SetInherited(provider2, inheritedValue, isTemplatedParent);
+									provider2.Store.SetInheritedDataContext(inheritedValue);
 								}
 							}
 						}
@@ -158,7 +108,7 @@ namespace Windows.UI.Xaml
 							{
 								if (item is IDependencyObjectStoreProvider provider2)
 								{
-									SetInherited(provider2, inheritedValue, isTemplatedParent);
+									provider2.Store.SetInheritedDataContext(inheritedValue);
 								}
 							}
 						}
@@ -330,7 +280,7 @@ namespace Windows.UI.Xaml
 		private void ApplyDataContext(object? actualDataContext)
 		{
 			_properties.ApplyDataContext(actualDataContext);
-			ApplyChildrenBindable(actualDataContext, isTemplatedParent: false);
+			ApplyChildrenBindable(actualDataContext);
 		}
 
 		private IDisposable? TryWriteDataContextChangedEventActivity()
