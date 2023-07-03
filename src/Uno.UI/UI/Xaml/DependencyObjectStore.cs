@@ -211,11 +211,11 @@ namespace Windows.UI.Xaml
 
 		/// <summary>
 		/// Determines if the dependency object automatically registers for inherited
-		/// properties such as <see cref="DataContextProperty"/> or <see cref="TemplatedParentProperty"/>.
+		/// properties such as <see cref="DataContextProperty"/>.
 		/// </summary>
 		/// <remarks>
-		/// This is used to avoid propagating the DataContext and TemplatedParent properties
-		/// for types that commonly do not expose inherited propertyes, such as visual states.
+		/// This is used to avoid propagating the DataContext property
+		/// for types that commonly do not expose inherited properties, such as visual states.
 		/// </remarks>
 		public bool IsAutoPropertyInheritanceEnabled { get; set; } = true;
 

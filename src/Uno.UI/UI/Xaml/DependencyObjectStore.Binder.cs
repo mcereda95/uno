@@ -42,19 +42,6 @@ namespace Windows.UI.Xaml
 		private bool _bindingsSuspended;
 		private readonly DependencyProperty _dataContextProperty;
 
-		/// <summary>
-		/// Sets the templated parent, with the ability to control the propagation of the templated parent.
-		/// </summary>
-		/// <param name="templatedParent">The parent to apply.</param>
-		/// <param name="applyToChildren">
-		/// Applies the templated parent to children if true. False is generally used when a control is template-able
-		/// to avoid propagating its own templated parent to its children.
-		/// </param>
-		public void SetTemplatedParent(FrameworkElement? templatedParent)
-		{
-			// called by code gen: SetTemplatedParent
-		}
-
 		private void ApplyChildrenBindable(object? inheritedValue)
 		{
 			for (int i = 0; i < _childrenBindable.Count; i++)
