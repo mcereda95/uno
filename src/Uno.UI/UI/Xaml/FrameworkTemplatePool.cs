@@ -292,7 +292,6 @@ namespace Windows.UI.Xaml
 				{
 					// Make sure the TemplatedParent is disconnected
 					provider.Store.Parent = null;
-					provider.Store.ClearValue(provider.Store.TemplatedParentProperty, DependencyPropertyValuePrecedences.Local);
 				}
 				if (shouldCleanUpTemplateRoot)
 				{

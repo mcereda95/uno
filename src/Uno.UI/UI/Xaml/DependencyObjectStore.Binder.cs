@@ -41,7 +41,6 @@ namespace Windows.UI.Xaml
 		private bool _isApplyingDataContextBindings;
 		private bool _bindingsSuspended;
 		private readonly DependencyProperty _dataContextProperty;
-		private readonly DependencyProperty _templatedParentProperty;
 
 		/// <summary>
 		/// Sets the templated parent, with the ability to control the propagation of the templated parent.
@@ -117,9 +116,6 @@ namespace Windows.UI.Xaml
 			}
 		}
 
-		private void SetInheritedTemplatedParent(object? templatedParent)
-			=> SetValue(_templatedParentProperty!, templatedParent, DependencyPropertyValuePrecedences.Inheritance, _properties.TemplatedParentPropertyDetails);
-
 		private void SetInheritedDataContext(object? dataContext)
 			=> SetValue(_dataContextProperty!, dataContext, DependencyPropertyValuePrecedences.Inheritance, _properties.DataContextPropertyDetails);
 
@@ -142,7 +138,6 @@ namespace Windows.UI.Xaml
 		}
 
 		internal DependencyProperty DataContextProperty => _dataContextProperty!;
-		internal DependencyProperty TemplatedParentProperty => _templatedParentProperty!;
 
 		/// <summary>
 		/// Restores the bindings that may have been cleared by <see cref="ClearBindings()"/>.
