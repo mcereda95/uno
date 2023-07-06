@@ -34,6 +34,8 @@ namespace Uno.UI.RemoteControl.HotReload
 {
 	partial class ClientHotReloadProcessor
 	{
+		
+
 		private static IEnumerable<UIElement> EnumerateInstances(
 			object instance,
 			Func<FrameworkElement, bool> predicate,
